@@ -100,27 +100,36 @@ def handle_message(event):
            'creattime':datetime.now(),
            'product':product}
         mongodb.insert_one(dic,'vproduct')
-    
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        line_bot_api.reply_message(event.reply_token,message)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=[name,event.message.text]))
     elif event.message.text[0:2] == '地址':
         address = event.message.text[2:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'address':address}
         mongodb.insert_one(dic,'vprofile')
-    
+        message = TextSendMessage(text='小鮮盒把地址記起來囉')
+        line_bot_api.reply_message(event.reply_token,message)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=[name,event.message.text]))
     elif event.message.text[0:2] == '電話':
         tel = event.message.text[2:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'tel':tel}
         mongodb.insert_one(dic,'vprofile')
- 
+        message = TextSendMessage(text='小鮮盒把電話記起來囉')
+        line_bot_api.reply_message(event.reply_token,message)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=[name,event.message.text]))
     elif event.message.text[0:2] == '稱呼':
         nam = event.message.text[2:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'name':nam}
         mongodb.insert_one(dic,'vprofile')
+        message = TextSendMessage(text='小鮮盒把稱呼記起來囉')
+        line_bot_api.reply_message(event.reply_token,message)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=[name,event.message.text]))
     #else:
     #    message = TextSendMessage(text=event.message.text[:2])
         
