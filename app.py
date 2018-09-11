@@ -106,7 +106,21 @@ def handle_message(event):
         dic = {'username':name,
            'creattime':datetime.now(),
            'address':address}
-        mongodb.insert_one(dic,'vaddress')
+        mongodb.insert_one(dic,'vprofile')
+    
+    elif event.message.text[:2] == '電話,':
+        tel = event.message.text[3:]
+        dic = {'username':name,
+           'creattime':datetime.now(),
+           'tel':tel}
+        mongodb.insert_one(dic,'vprofile')
+ 
+    elif event.message.text[:2] == '稱呼,':
+        nam = event.message.text[3:]
+        dic = {'username':name,
+           'creattime':datetime.now(),
+           'name':nam}
+        mongodb.insert_one(dic,'vprofile')
     #else:
     #    message = TextSendMessage(text=event.message.text)
         
