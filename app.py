@@ -121,10 +121,10 @@ def handle_message(event):
            'creattime':datetime.now(),
            'name':nam}
         mongodb.insert_one(dic,'vprofile')
-    else:
-        message = TextSendMessage(text=event.message.text[:2])
+    #else:
+    #    message = TextSendMessage(text=event.message.text[:2])
         
-    line_bot_api.reply_message(event.reply_token,message)
+    #line_bot_api.reply_message(event.reply_token,message)
 
 if __name__ == '__main__':
     app.run(debug=True)
