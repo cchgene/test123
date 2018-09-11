@@ -94,28 +94,28 @@ def handle_message(event):
         message = TextSendMessage(text=random.choice(['1','2','3','4','5','6']))
         line_bot_api.reply_message(event.reply_token,message)
     
-    elif event.message.text[:2] == '買菜,':
+    elif event.message.text[:3] == '買菜':
         product = event.message.text[3:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'product':product}
         mongodb.insert_one(dic,'vproduct')
     
-    elif event.message.text[:2] == '地址,':
+    elif event.message.text[:3] == '地址':
         address = event.message.text[3:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'address':address}
         mongodb.insert_one(dic,'vprofile')
     
-    elif event.message.text[:2] == '電話,':
+    elif event.message.text[:3] == '電話':
         tel = event.message.text[3:]
         dic = {'username':name,
            'creattime':datetime.now(),
            'tel':tel}
         mongodb.insert_one(dic,'vprofile')
  
-    elif event.message.text[:2] == '稱呼,':
+    elif event.message.text[:3] == '稱呼':
         nam = event.message.text[3:]
         dic = {'username':name,
            'creattime':datetime.now(),
