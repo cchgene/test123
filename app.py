@@ -134,6 +134,7 @@ def handle_message(event):
                 ]
             )
         )
+        line_bot_api.reply_message(event.reply_token,message)
     elif event.message.text[0] == '買':
         if len(str(event.message.text[1:])) >= 1:
             product = event.message.text[1:]
