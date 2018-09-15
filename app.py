@@ -94,7 +94,7 @@ def handle_message(event):
             template=CarouselTemplate(
                 columns=[
                     CarouselColumn(
-                        thumbnail_image_url='https://imgur.com/a/LRFs3XR.jpg',
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
                         title='綜合營養組合',
                         text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
                         actions=[
@@ -113,7 +113,7 @@ def handle_message(event):
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='https://imgur.com/a/9fNxMgy.jpg',
+                        thumbnail_image_url='https://i.imgur.com/0xFDvDV.jpg',
                         title='節慶組合',
                         text='節慶必備(烤肉、拜拜)',
                         actions=[
