@@ -88,7 +88,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
     
     elif event.message.text[0] == '買':
-        if len(event.message.text) == 1:
+        if event.message.text == '買':
             message = TemplateSendMessage(
                 alt_text='Carousel template',
                 template=CarouselTemplate(
@@ -130,8 +130,7 @@ def handle_message(event):
                                 text='任意組合'
                             )
                         ]
-                    )#,
-"""
+                    ),
                     CarouselColumn(
                         thumbnail_image_url='https://imgur.com/a/3RMao1T.jpg',
                         title='其他',
@@ -151,7 +150,6 @@ def handle_message(event):
                             )
                         ]
                     )
-"""
                 ]
             )
         )
@@ -204,7 +202,8 @@ def handle_message(event):
            'message':message}
         
         mongodb.insert_one(dic,'vmessages')
-        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=message))
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
     #    message = TextSendMessage(text=event.message.text[:2])
         
     #line_bot_api.reply_message(event.reply_token,message)
