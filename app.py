@@ -130,7 +130,8 @@ def handle_message(event):
                                 text='任意組合'
                             )
                         ]
-                    ),
+                    )#,
+"""
                     CarouselColumn(
                         thumbnail_image_url='https://imgur.com/a/3RMao1T.jpg',
                         title='其他',
@@ -150,6 +151,7 @@ def handle_message(event):
                             )
                         ]
                     )
+"""
                 ]
             )
         )
