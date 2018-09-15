@@ -88,12 +88,13 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
     
 
-    elif event.message.text == '買':
-        message = TemplateSendMessage(
-            alt_text='Carousel template',
-            template=CarouselTemplate(
-                columns=[
-                    CarouselColumn(
+    elif event.message.text[0] == '買':
+        if event.message.text == '買':
+            message = TemplateSendMessage(
+                alt_text='Carousel template',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
                         title='綜合營養組合',
                         text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
@@ -112,7 +113,7 @@ def handle_message(event):
                             )
                         ]
                     ),
-                    CarouselColumn(
+                        CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/0xFDvDV.jpg',
                         title='節慶組合',
                         text='節慶必備(烤肉、拜拜)',
@@ -130,22 +131,39 @@ def handle_message(event):
                                 text='任意組合'
                             )
                         ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/cLRmBTe.jpg',
+                        title='其他',
+                        text='其他',
+                        actions=[
+                            MessageTemplateAction(
+                                label='關於鮮蔬盒',
+                                text='關於鮮蔬盒'
+                            ),
+                            MessageTemplateAction(
+                                label='菜單與分類',
+                                text='菜單與分類'
+                            ),
+                            MessageTemplateAction(
+                                label='其他',
+                                text='其他'
+                            )
+                        ]
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token,message)
-    elif event.message.text[0] == '買':
-        if len(str(event.message.text[1:])) >= 1:
+        else:
             product = event.message.text[1:]
             dic = {'username':name,
                'creattime':datetime.now(),
                'product':product}
             mongodb.insert_one(dic,'vproduct')
             message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
-            line_bot_api.reply_message(event.reply_token,message)
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
     elif event.message.text[0:2] == '地址':
         address = event.message.text[2:]
         dic = {'username':name,
