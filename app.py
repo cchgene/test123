@@ -87,9 +87,9 @@ def handle_message(event):
         message = TextSendMessage(text=random.choice(['1','2','3','4','5','6']))
         line_bot_api.reply_message(event.reply_token,message)
     
-    elif event.message.text[0] == '買':
-        if event.message.text == '買':
-            message = TemplateSendMessage(
+
+    elif event.message.text == '買':
+        message = TemplateSendMessage(
                 alt_text='Carousel template',
                 template=CarouselTemplate(
                     columns=[
@@ -153,8 +153,8 @@ def handle_message(event):
                 ]
             )
         )
-
-        else:
+    elif event.message.text[0] == '買':
+        if len(str(event.message.text[1:])) >= 1:
             product = event.message.text[1:]
             dic = {'username':name,
                'creattime':datetime.now(),
