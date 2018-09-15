@@ -90,10 +90,10 @@ def handle_message(event):
 
     elif event.message.text == '買':
         message = TemplateSendMessage(
-                alt_text='Carousel template',
-                template=CarouselTemplate(
-                    columns=[
-                        CarouselColumn(
+            alt_text='Carousel template',
+            template=CarouselTemplate(
+                columns=[
+                    CarouselColumn(
                         thumbnail_image_url='https://imgur.com/a/LRFs3XR.jpg',
                         title='綜合營養組合',
                         text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
@@ -112,7 +112,7 @@ def handle_message(event):
                             )
                         ]
                     ),
-                        CarouselColumn(
+                    CarouselColumn(
                         thumbnail_image_url='https://imgur.com/a/9fNxMgy.jpg',
                         title='節慶組合',
                         text='節慶必備(烤肉、拜拜)',
@@ -128,25 +128,6 @@ def handle_message(event):
                             MessageTemplateAction(
                                 label='任意組合',
                                 text='任意組合'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://imgur.com/a/3RMao1T.jpg',
-                        title='其他',
-                        text='其他',
-                        actions=[
-                            MessageTemplateAction(
-                                label='關於鮮蔬盒',
-                                text='關於鮮蔬盒'
-                            ),
-                            MessageTemplateAction(
-                                label='菜單與分類',
-                                text='菜單與分類'
-                            ),
-                            MessageTemplateAction(
-                                label='其他',
-                                text='其他'
                             )
                         ]
                     )
