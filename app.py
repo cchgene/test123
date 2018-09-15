@@ -69,13 +69,6 @@ def handle_message(event):
     print(uid)
     print(message)
     
-    dic = {'userid':uid,
-           'username':name,
-           'creattime':datetime.now(),
-           'message':message}
-        
-    mongodb.insert_one(dic,'vmessages')
-    
     if event.message.text == '抽圖':
         #line_picture = random.choice([[random.choice([i for i in range(1,18)] + [21] + [i for i in range(100,140)] + [i for i in range(401,431)]),1],[random.choice([18] + [19] + [20] + [i for i in range(22,48)] + [i for i in range(140,180)] + [i for i in range(501,528)]),2]])
         line_picture = random.choice([[random.choice([i for i in range(1,18)] + [21] + \
@@ -95,15 +88,82 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
     
     elif event.message.text[0] == '買':
-        product = event.message.text[1:]
-        dic = {'username':name,
-           'creattime':datetime.now(),
-           'product':product}
-        mongodb.insert_one(dic,'vproduct')
-        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
-        line_bot_api.reply_message(event.reply_token,message)
-        name_active = str(name)+':'+str(event.message.text)
-        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        if len(event.message.text) == 1:
+            message = TemplateSendMessage(
+                alt_text='Carousel template',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://imgur.com/a/LRFs3XR.jpg',
+                        title='綜合營養組合',
+                        text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
+                        actions=[
+                            MessageTemplateAction(
+                                label='鮮蔬果組',
+                                text='鮮蔬果組'
+                            ),
+                            MessageTemplateAction(
+                                label='當季蔬果組',
+                                text='當季蔬果組'
+                            ),
+                            MessageTemplateAction(
+                                label='綠色蔬菜組',
+                                text='綠色蔬菜組'
+                            )
+                        ]
+                    ),
+                        CarouselColumn(
+                        thumbnail_image_url='https://imgur.com/a/9fNxMgy.jpg',
+                        title='節慶組合',
+                        text='節慶必備(烤肉、拜拜)',
+                        actions=[
+                            MessageTemplateAction(
+                                label='烤肉組合',
+                                text='烤肉組合'
+                            ),
+                            MessageTemplateAction(
+                                label='拜拜組合',
+                                text='拜拜組合'
+                            ),
+                            MessageTemplateAction(
+                                label='任意組合',
+                                text='任意組合'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://imgur.com/a/3RMao1T.jpg',
+                        title='其他',
+                        text='其他',
+                        actions=[
+                            MessageTemplateAction(
+                                label='關於鮮蔬盒',
+                                text='關於鮮蔬盒'
+                            ),
+                            MessageTemplateAction(
+                                label='菜單與分類',
+                                text='菜單與分類'
+                            ),
+                            MessageTemplateAction(
+                                label='其他',
+                                text='其他'
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+
+        else:
+            product = event.message.text[1:]
+            dic = {'username':name,
+               'creattime':datetime.now(),
+               'product':product}
+            mongodb.insert_one(dic,'vproduct')
+            message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+            line_bot_api.reply_message(event.reply_token,message)
+            name_active = str(name)+':'+str(event.message.text)
+            line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
     elif event.message.text[0:2] == '地址':
         address = event.message.text[2:]
         dic = {'username':name,
@@ -134,7 +194,15 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
-    #else:
+
+    else:
+        dic = {'userid':uid,
+           'username':name,
+           'creattime':datetime.now(),
+           'message':message}
+        
+        mongodb.insert_one(dic,'vmessages')
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=message))
     #    message = TextSendMessage(text=event.message.text[:2])
         
     #line_bot_api.reply_message(event.reply_token,message)
