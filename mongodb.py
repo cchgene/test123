@@ -72,7 +72,7 @@ def get_user_product(userid,collection):
     #return product_list
     product_ = ()
     for item in user_info:
-        product_ += ((item['product'],item['count']))
+        product_ += tuple([item['product'],item['count']])
     return product_
 
 #def update_user_product(userid,collection):
