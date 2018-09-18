@@ -66,10 +66,7 @@ def get_user_product(userid,collection):
     coll = db[collection]
     user_info = list(coll.find({"userid":userid,"status":0}))
 
-    product_list = []
-    for item in user_info:
-        product_list.append(item['product'])
-    return product_list
+    return user_info
 
 
 #def update_user_product(userid,collection):
