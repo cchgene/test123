@@ -81,7 +81,8 @@ def handle_message(event):
         dic = {'username':name,
             'creattime':datetime.now(),
             'product':combo_product,
-            'count':combo_count}
+            'count':combo_count,
+            'status':0}
         mongodb.insert_one(dic,'vproduct')
         message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
         name_active = str(name)+':'+str(event.message.text)
