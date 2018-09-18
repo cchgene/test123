@@ -134,8 +134,9 @@ def handle_message(event):
                 ]
             )
         )
-        
-        elif evnet.message.text[0:4] == '買鮮蔬果':
+        line_bot_api.reply_message(event.reply_token,message)
+"""
+    if evnet.message.text[0:4] == '買鮮蔬果':
             if event.message.text[4] == '大':
                 combo_product = event.message.text[1:7]
                 combo_count = event.message.text[-1]
@@ -165,8 +166,8 @@ def handle_message(event):
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
-
-    elif event.message.text == '鮮蔬果組': 
+"""
+    if event.message.text == '鮮蔬果組': 
         message = TemplateSendMessage(
                 alt_text='需要哪種鮮蔬果組合呢?',
                 template=CarouselTemplate(
@@ -195,7 +196,7 @@ def handle_message(event):
         )
         
     elif event.message.text == '查詢訂單':
-        product_list = get_user_product(uid,'vproduct')
+        product_list = mongodb.get_user_product(uid,'vproduct')
         if len(product_list) == 0:
             message = TextSendMessage(text='目前並無商品')
         else:
