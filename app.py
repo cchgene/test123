@@ -56,6 +56,8 @@ def handle_follow(event):
                'Note':'user',
                'ready':0}
         mongodb.insert_one(dic,'vusers')
+        add_mes = str(name) + '已經加入小鮮盒囉'
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=add_mes))
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
