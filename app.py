@@ -78,7 +78,8 @@ def handle_message(event):
         elif event.message.text[4] == '小':
             combo_product = event.message.text[1:7]
             combo_count = event.message.text[-1]
-        dic = {'username':name,
+        dic = {'userid':uid,
+            'username':name,
             'creattime':datetime.now(),
             'product':combo_product,
             'count':combo_count,
