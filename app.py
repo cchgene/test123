@@ -89,6 +89,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         
     elif event.message.text == '查詢訂單':
+        product_list = []
         product_list = mongodb.get_user_product(uid,'vproduct')
         if len(product_list) == 0:
             message = TextSendMessage(text='目前並無商品')
@@ -156,7 +157,7 @@ def handle_message(event):
                 ]
             )
         )
-        
+        line_bot_api.reply_message(event.reply_token,message)
     elif event.message.text == '買':
         message = TemplateSendMessage(
             alt_text='買什麼東西呢?',
@@ -222,6 +223,7 @@ def handle_message(event):
                 ]
             )
         )
+        line_bot_api.reply_message(event.reply_token,message)
     elif event.message.text[0] == '買':
         product = event.message.text[1:]
         dic = {'username':name,
