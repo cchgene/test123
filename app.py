@@ -96,7 +96,7 @@ def handle_message(event):
         if len(product_list) == 0:
             message = TextSendMessage(text='目前並無商品')
         else:
-            message = TextSendMessage(text=string(set(product_list)))
+            message = TextSendMessage(text=str(set(product_list)))
         line_bot_api.reply_message(event.reply_token,message)
         
     elif event.message.text[0:2] == '地址':
