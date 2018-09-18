@@ -69,74 +69,7 @@ def handle_message(event):
     print(message)
     
     if event.message.text[0] == '買':
-        if event.message.text == '買':
-            message = TemplateSendMessage(
-                alt_text='買什麼東西呢?',
-                template=CarouselTemplate(
-                    columns=[
-                        CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
-                        title='綜合營養組合',
-                        text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
-                        actions=[
-                            MessageTemplateAction(
-                                label='鮮蔬果組',
-                                text='鮮蔬果組'
-                            ),
-                            MessageTemplateAction(
-                                label='當季蔬果組',
-                                text='當季蔬果組'
-                            ),
-                            MessageTemplateAction(
-                                label='綠色蔬菜組',
-                                text='綠色蔬菜組'
-                            )
-                        ]
-                    ),
-                        CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/0xFDvDV.jpg',
-                        title='節慶組合',
-                        text='節慶必備(烤肉、拜拜)',
-                        actions=[
-                            MessageTemplateAction(
-                                label='烤肉組合',
-                                text='烤肉組合'
-                            ),
-                            MessageTemplateAction(
-                                label='拜拜組合',
-                                text='拜拜組合'
-                            ),
-                            MessageTemplateAction(
-                                label='任意組合',
-                                text='任意組合'
-                            )
-                        ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/cLRmBTe.jpg',
-                        title='其他',
-                        text='其他',
-                        actions=[
-                            MessageTemplateAction(
-                                label='關於鮮蔬盒的介紹與起源',
-                                text='關於鮮蔬盒'
-                            ),
-                            MessageTemplateAction(
-                                label='菜單與分類',
-                                text='菜單與分類'
-                            ),
-                            MessageTemplateAction(
-                                label='其他',
-                                text='其他'
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token,message)
-"""
-    if evnet.message.text[0:4] == '買鮮蔬果':
+        if evnet.message.text[0:4] == '買鮮蔬果':
             if event.message.text[4] == '大':
                 combo_product = event.message.text[1:7]
                 combo_count = event.message.text[-1]
@@ -166,8 +99,8 @@ def handle_message(event):
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
-"""
-    if event.message.text == '鮮蔬果組': 
+
+    elif event.message.text == '鮮蔬果組': 
         message = TemplateSendMessage(
                 alt_text='需要哪種鮮蔬果組合呢?',
                 template=CarouselTemplate(
@@ -235,6 +168,75 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        
+        
+    elif event.message.text == '買':
+        message = TemplateSendMessage(
+            alt_text='買什麼東西呢?',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
+                        title='綜合營養組合',
+                        text='幫妳配好好的組合，再也不用再擔心不知道吃什麼',
+                        actions=[
+                            MessageTemplateAction(
+                                label='鮮蔬果組',
+                                text='鮮蔬果組'
+                            ),
+                            MessageTemplateAction(
+                                label='當季蔬果組',
+                                text='當季蔬果組'
+                            ),
+                            MessageTemplateAction(
+                                label='綠色蔬菜組',
+                                text='綠色蔬菜組'
+                            )
+                        ]
+                    ),
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/0xFDvDV.jpg',
+                        title='節慶組合',
+                        text='節慶必備(烤肉、拜拜)',
+                        actions=[
+                            MessageTemplateAction(
+                                label='烤肉組合',
+                                text='烤肉組合'
+                            ),
+                            MessageTemplateAction(
+                                label='拜拜組合',
+                                text='拜拜組合'
+                            ),
+                            MessageTemplateAction(
+                                label='任意組合',
+                                text='任意組合'
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/cLRmBTe.jpg',
+                        title='其他',
+                        text='其他',
+                        actions=[
+                            MessageTemplateAction(
+                                label='關於鮮蔬盒的介紹與起源',
+                                text='關於鮮蔬盒'
+                            ),
+                            MessageTemplateAction(
+                                label='菜單與分類',
+                                text='菜單與分類'
+                            ),
+                            MessageTemplateAction(
+                                label='其他',
+                                text='其他'
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+        
+        
 
     else:
         dic = {'userid':uid,
