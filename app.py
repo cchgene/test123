@@ -97,7 +97,7 @@ def handle_message(event):
         if len(product_list) == 0:
             message = TextSendMessage(text='目前並無商品')
         else:
-            message = ','.join(set(product_list))
+            #message = ','.join(set(product_list))
             message = TextSendMessage(text=message)
         line_bot_api.reply_message(event.reply_token,message)
         
