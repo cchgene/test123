@@ -89,8 +89,8 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         
     elif event.message.text == '查詢訂單':
-        product_list = []
         product_list = mongodb.get_user_product(uid,'vproduct')
+        print(product_list)
         if len(product_list) == 0:
             message = TextSendMessage(text='目前並無商品')
         else:
@@ -141,15 +141,15 @@ def handle_message(event):
                         text='包含各式葉菜、根莖、菇菌、瓜果、豆以及(蔥、薑、蒜、辣椒)調味類',
                         actions=[
                             MessageTemplateAction(
-                            label='鮮蔬果大組合-299元(4-5人份)',
+                            label='大組合-299元(4-5人份)',
                             text='買鮮蔬果大組合X1'
                             ),
                             MessageTemplateAction(
-                            label='鮮蔬果中組合-199元(2-3人份)',
+                            label='中組合-199元(2-3人份)',
                             text='買鮮蔬果中組合X1'
                             ),
                             MessageTemplateAction(
-                            label='鮮蔬果小組合-99元(1-2人份)',
+                            label='小組合-99元(1-2人份)',
                             text='買鮮蔬果中組合X1'
                             )
                         ]
