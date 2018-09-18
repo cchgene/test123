@@ -57,10 +57,9 @@ def handle_follow(event):
                'ready':0}
         mongodb.insert_one(dic,'vusers')
 
-#訊息傳遞區塊
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # 取得個人資料
+
     profile = line_bot_api.get_profile(event.source.user_id)
     name = profile.display_name
     uid = profile.user_id
@@ -69,29 +68,10 @@ def handle_message(event):
     print(uid)
     print(message)
     
-    if event.message.text == '抽圖':
-        #line_picture = random.choice([[random.choice([i for i in range(1,18)] + [21] + [i for i in range(100,140)] + [i for i in range(401,431)]),1],[random.choice([18] + [19] + [20] + [i for i in range(22,48)] + [i for i in range(140,180)] + [i for i in range(501,528)]),2]])
-        line_picture = random.choice([[random.choice([i for i in range(1,18)] + [21] + \
-                               [i for i in range(100,140)] + [i for i in range(401,431)]),1],\
-    [random.choice([18] + [19] + [20] + [i for i in range(22,48)] + \
-                   [i for i in range(140,180)] + [i for i in range(501,528)]),2],\
-    [random.choice([i for i in range(180,260)]),3],\
-    [random.choice([i for i in range(260,308)] + \
-                   [i for i in range(601,633)]),4]])
-        message = StickerSendMessage(
-            package_id=str(line_picture[1]),
-            sticker_id=str(line_picture[0]))
-        line_bot_api.reply_message(event.reply_token,message)
-
-    elif event.message.text == '擲骰子':
-        message = TextSendMessage(text=random.choice(['1','2','3','4','5','6']))
-        line_bot_api.reply_message(event.reply_token,message)
-    
-
-    elif event.message.text[0] == '買':
+    if event.message.text[0] == '買':
         if event.message.text == '買':
             message = TemplateSendMessage(
-                alt_text='Carousel template',
+                alt_text='買什麼東西呢?',
                 template=CarouselTemplate(
                     columns=[
                         CarouselColumn(
@@ -138,7 +118,7 @@ def handle_message(event):
                         text='其他',
                         actions=[
                             MessageTemplateAction(
-                                label='關於鮮蔬盒',
+                                label='關於鮮蔬盒的介紹與起源',
                                 text='關於鮮蔬盒'
                             ),
                             MessageTemplateAction(
@@ -154,16 +134,67 @@ def handle_message(event):
                 ]
             )
         )
+        
+        elif evnet.message.text[1:4] == '鮮蔬果':
+            if event.message.text[4:9] == '大組合X1':
+                combo_product = event.message.text[1:7]
+                combo_count = event.message.text[-1]
+            elif event.message.text[4:9] == '中組合X1':
+                combo_product = event.message.text[1:7]
+                combo_count = event.message.text[-1]
+            elif event.message.text[4:9] == '小組合X1':
+                combo_product = event.message.text[1:7]
+                combo_count = event.message.text[-1]
+            dic = {'username':name,
+            'creattime':datetime.now(),
+            'product':combo_product,
+            'count':combo_count}
+            mongodb.insert_one(dic,'vproduct')
+            message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+            name_active = str(name)+':'+str(event.message.text)
+            line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+            line_bot_api.reply_message(event.reply_token,message)
+        
         else:
             product = event.message.text[1:]
             dic = {'username':name,
                'creattime':datetime.now(),
                'product':product}
-            mongodb.insert_one(dic,'vproduct')
+            mongodb.insert_one(dic,'vmproduct')
             message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text == '鮮蔬果組':
+        message = TemplateSendMessage(
+            alt_text='需要哪種鮮蔬果組合呢?',
+            template=ButtonsTemplate(
+                thumbnail_image_url='https://i.imgur.com/F8WHUU6.jpg',  #需改圖
+                title='需要哪種鮮蔬果組合呢?',
+                text='包含各式葉菜、根莖、菇菌、瓜果、豆以及(蔥、薑、蒜、辣椒)調味類',
+                actions=[
+                    MessageTemplateAction(
+                        label='鮮蔬果大組合-299元(4-5人份)',
+                        text='買鮮蔬果大組合X1'
+                    ),
+                    MessageTemplateAction(
+                        label='鮮蔬果中組合-199元(2-3人份)',
+                        text='買鮮蔬果中組合X1'
+                    ),
+                    MessageTemplateAction(
+                        label='鮮蔬果小組合-99元(1-2人份)',
+                        text='買鮮蔬果中組合X1'
+                    )
+                ]
+            )
+        )
+    
+    elif event.message.text == '查詢訂單':
+        product_list = get_user_product(uid,'vproduct')
+        message = TextSendMessage(text=product_list)
+        line_bot_api.reply_message(event.reply_token,message)
+        
     elif event.message.text[0:2] == '地址':
         address = event.message.text[2:]
         dic = {'username':name,
@@ -174,6 +205,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+
     elif event.message.text[0:2] == '電話':
         tel = event.message.text[2:]
         dic = {'username':name,
@@ -184,6 +216,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+
     elif event.message.text[0:2] == '稱呼':
         nam = event.message.text[2:]
         dic = {'username':name,

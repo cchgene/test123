@@ -34,9 +34,6 @@ def get_all(collection):
     return list(coll.find())
 
 def find_user(userid,collection):
-    '''
-    確認這個使用者是不是加入了
-    '''
     db = init_db()
     coll = db[collection]
     return len(list(coll.find({"userid":userid})))
@@ -63,4 +60,19 @@ def update_byid(userid,setdict,collection):
     db = init_db()
     coll = db[collection]
     coll.update({"userid":userid},{"$set":setdict}) 
+
+def get_user_product(userid,collection):
+    db = init_db()
+    coll = db[collection]
+    user_info = list(coll.find({"userid":userid,"status":0}))
+
+    product_list = []
+    for item in user_info:
+        product_list.append(item['product'])
+    return product_list
+
+
+#def update_user_product(userid,collection):
+#    db = init_db()
+#    coll = db[collection]
 
