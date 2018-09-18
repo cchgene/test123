@@ -88,17 +88,6 @@ def handle_message(event):
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
         
-        else:
-            product = event.message.text[1:]
-            dic = {'username':name,
-               'creattime':datetime.now(),
-               'product':product}
-            mongodb.insert_one(dic,'vmproduct')
-            message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
-            name_active = str(name)+':'+str(event.message.text)
-            line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
-        line_bot_api.reply_message(event.reply_token,message)
-        
     elif event.message.text == '查詢訂單':
         product_list = mongodb.get_user_product(uid,'vproduct')
         if len(product_list) == 0:
@@ -233,6 +222,16 @@ def handle_message(event):
                 ]
             )
         )
+    elif event.message.text[0] == '買':
+        product = event.message.text[1:]
+        dic = {'username':name,
+           'creattime':datetime.now(),
+           'product':product}
+        mongodb.insert_one(dic,'vmproduct')
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
         
         
 
