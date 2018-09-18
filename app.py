@@ -164,7 +164,7 @@ def handle_message(event):
             message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
-            line_bot_api.reply_message(event.reply_token,message)
+        line_bot_api.reply_message(event.reply_token,message)
 
     elif event.message.text == '鮮蔬果組': 
         message = TemplateSendMessage(
@@ -196,7 +196,10 @@ def handle_message(event):
         
     elif event.message.text == '查詢訂單':
         product_list = get_user_product(uid,'vproduct')
-        message = TextSendMessage(text=product_list)
+        if len(product_list) == 0:
+            message = TextSendMessage(text='目前並無商品')
+        else:
+            message = TextSendMessage(text=product_list)
         line_bot_api.reply_message(event.reply_token,message)
         
     elif event.message.text[0:2] == '地址':
