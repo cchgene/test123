@@ -98,7 +98,7 @@ def handle_message(event):
             message = TextSendMessage(text='目前並無商品')
         else:
             #message = ','.join(set(product_list))
-            message = str(product_list)
+            message = str(dict(product_list))
             print(message)
             message = TextSendMessage(text=message)
 
