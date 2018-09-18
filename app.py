@@ -68,26 +68,25 @@ def handle_message(event):
     print(uid)
     print(message)
     
-    if event.message.text[0] == '買':
-        if evnet.message.text[0:4] == '買鮮蔬果':
-            if event.message.text[4] == '大':
-                combo_product = event.message.text[1:7]
-                combo_count = event.message.text[-1]
-            elif event.message.text[4] == '中':
-                combo_product = event.message.text[1:7]
-                combo_count = event.message.text[-1]
-            elif event.message.text[4] == '小':
-                combo_product = event.message.text[1:7]
-                combo_count = event.message.text[-1]
-            dic = {'username':name,
+    if event.message.text[0:4] == '買鮮蔬果':
+        if event.message.text[4] == '大':
+            combo_product = event.message.text[1:7]
+            combo_count = event.message.text[-1]
+        elif event.message.text[4] == '中':
+            combo_product = event.message.text[1:7]
+            combo_count = event.message.text[-1]
+        elif event.message.text[4] == '小':
+            combo_product = event.message.text[1:7]
+            combo_count = event.message.text[-1]
+        dic = {'username':name,
             'creattime':datetime.now(),
             'product':combo_product,
             'count':combo_count}
-            mongodb.insert_one(dic,'vproduct')
-            message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
-            name_active = str(name)+':'+str(event.message.text)
-            line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
-            line_bot_api.reply_message(event.reply_token,message)
+        mongodb.insert_one(dic,'vproduct')
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
         
         else:
             product = event.message.text[1:]
@@ -99,34 +98,6 @@ def handle_message(event):
             name_active = str(name)+':'+str(event.message.text)
             line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
-
-    elif event.message.text == '鮮蔬果組': 
-        message = TemplateSendMessage(
-                alt_text='需要哪種鮮蔬果組合呢?',
-                template=CarouselTemplate(
-                    columns=[
-                        CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
-                        title='需要哪種鮮蔬果組合呢?',
-                        text='包含各式葉菜、根莖、菇菌、瓜果、豆以及(蔥、薑、蒜、辣椒)調味類',
-                        actions=[
-                            MessageTemplateAction(
-                            label='鮮蔬果大組合-299元(4-5人份)',
-                            text='買鮮蔬果大組合X1'
-                            ),
-                            MessageTemplateAction(
-                            label='鮮蔬果中組合-199元(2-3人份)',
-                            text='買鮮蔬果中組合X1'
-                            ),
-                            MessageTemplateAction(
-                            label='鮮蔬果小組合-99元(1-2人份)',
-                            text='買鮮蔬果中組合X1'
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
         
     elif event.message.text == '查詢訂單':
         product_list = mongodb.get_user_product(uid,'vproduct')
@@ -168,7 +139,34 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
-        
+
+    elif event.message.text == '鮮蔬果組': 
+        message = TemplateSendMessage(
+                alt_text='需要哪種鮮蔬果組合呢?',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
+                        title='需要哪種鮮蔬果組合呢?',
+                        text='包含各式葉菜、根莖、菇菌、瓜果、豆以及(蔥、薑、蒜、辣椒)調味類',
+                        actions=[
+                            MessageTemplateAction(
+                            label='鮮蔬果大組合-299元(4-5人份)',
+                            text='買鮮蔬果大組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='鮮蔬果中組合-199元(2-3人份)',
+                            text='買鮮蔬果中組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='鮮蔬果小組合-99元(1-2人份)',
+                            text='買鮮蔬果中組合X1'
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
         
     elif event.message.text == '買':
         message = TemplateSendMessage(
