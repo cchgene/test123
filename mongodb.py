@@ -68,9 +68,8 @@ def get_user_product(userid,collection):
 
     product_list = []
     for item in user_info:
-        product_list.append(item['product'])
+        product_list.append(item['product'],item['count'])
     return product_list
-
 
 #def update_user_product(userid,collection):
 #    db = init_db()
