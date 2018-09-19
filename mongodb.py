@@ -78,4 +78,4 @@ def remove_user_product(userid,collection):
 def update_user_product_count(userid,collection,product,count):
     db = init_db()
     coll = db[collection]
-    coll.update({"userid":userid,"status":0,"product":product},{$set:{'count':count}})
+    coll.update({"userid":userid,"status":0,"product":product},{"$set":{'count':count}},true)
