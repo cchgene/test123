@@ -27,13 +27,6 @@ def insert_one(dic,collection):
     coll = db[collection]
     coll.insert_one(dic)
 
-def upsert_one(dic,collection):
-    #collection_name = 'users'
-    db = init_db()
-    coll = db[collection]
-    coll.update(dic,{upsert:1})
-    
-
 def get_all(collection):
     db = init_db()
     coll = db[collection]
