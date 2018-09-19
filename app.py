@@ -423,7 +423,7 @@ def handle_message(event):
         elif event.message.text[2:7] == '烤肉大組合|烤肉中組合|烤肉小組合|拜拜大組合|拜拜中組合|拜拜小組合':
             product_ = event.message.text[2:7]
         count_change = event.message.text[-1]
-        update_user_product_count(uid,'vproduct',product_,count_change)
+        mongodb.update_user_product_count(uid,'vproduct',product_,count_change)
         message = '已'+str(event.message.text[0:2]) + str(product_) + '為' + str(count_change) + '份'
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
