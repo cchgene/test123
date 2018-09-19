@@ -70,12 +70,17 @@ def get_user_product(userid,collection):
         product_list.append([item['product'],item['count']])
     return product_list
 
-def remove_user_product(userid,collection):
+def remove_user_all_product(userid,collection):
     db = init_db()
     coll = db[collection]
     coll.remove({"userid":userid,"status":0})
 
-def update_user_product_count(userid,collection,product,count):
+def remove_user_product(userid,collection,product):
     db = init_db()
     coll = db[collection]
-    coll.update({"userid":userid,"status":0,"product":product},{"$set":{'count':count}},true)
+    coll.remove({"userid":userid,"status":0,"product":product})
+
+#def update_user_product_count(userid,collection,product,count):
+#    db = init_db()
+#    coll = db[collection]
+#    coll.update({"userid":userid,"status":0,"product":product},{"$set":{'count':count}},true)
