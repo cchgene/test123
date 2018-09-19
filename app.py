@@ -187,7 +187,7 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,message)
 
     elif event.message.text == '刪除購物籃內所有組合商品':
-        mongodb.remove_user_product(uid,'vproduct')
+        mongodb.remove_user_all_product(uid,'vproduct')
         message = TextSendMessage(text='已刪除購物車內所有組合商品')
         line_bot_api.reply_message(event.reply_token,message)
         name_active = str(name)+':'+str(event.message.text)
@@ -419,15 +419,20 @@ def handle_message(event):
         if event.message.text[2:8] == '鮮蔬果大組合|鮮蔬果中組合|鮮蔬果小組合':
             product_ = event.message.text[2:8]
             count_change = event.message.text[-1]
-            mongodb.update_user_product_count(uid,'vproduct',product_,count_change)
         elif event.message.text[2:9] == '當季蔬果大組合|當季蔬果中組合|當季蔬果小組合|綠色蔬菜大組合|綠色蔬菜中組合|綠色蔬菜小組合':
             product_ = event.message.text[2:9]
             count_change = event.message.text[-1]
-            mongodb.update_user_product_count(uid,'vproduct',product_,count_change)
         elif event.message.text[2:7] == '烤肉大組合|烤肉中組合|烤肉小組合|拜拜大組合|拜拜中組合|拜拜小組合':
             product_ = event.message.text[2:7]
             count_change = event.message.text[-1]
-            mongodb.update_user_product_count(uid,'vproduct',product_,count_change)
+        mongodb.remove_user_product(uid,'vproduct',product_)
+        dic = {'userid':uid,
+            'username':name,
+            'creattime':datetime.now(),
+            'product':product_,
+            'count':count_change,
+            'status':0}
+        mongodb.insert_one(dic,'vproduct')
         text_ = '已' + str(event.message.text)
         message = TextSendMessage(text=text_)
         line_bot_api.reply_message(event.reply_token,message)
