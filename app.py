@@ -16,9 +16,7 @@ import mongodb
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ['Access_Token'])
-
 handler = WebhookHandler(os.environ['Secret'])
-
 line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text='買起來買起來'))
 
 @app.route("/callback", methods=['POST'])
@@ -38,11 +36,8 @@ def callback():
         abort(400)
     return 'OK'
 
-
-
 @handler.add(FollowEvent)
 def handle_follow(event):
-
     profile = line_bot_api.get_profile(event.source.user_id)
     name = profile.display_name
     uid = profile.user_id
@@ -61,7 +56,6 @@ def handle_follow(event):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
     profile = line_bot_api.get_profile(event.source.user_id)
     name = profile.display_name
     uid = profile.user_id
@@ -113,7 +107,73 @@ def handle_message(event):
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
-        
+
+    elif event.message.text[0:5] == '買綠色蔬菜':
+        if event.message.text[5] == '大':
+            combo_product = event.message.text[1:8]
+            combo_count = event.message.text[-1]
+        elif event.message.text[5] == '中':
+            combo_product = event.message.text[1:8]
+            combo_count = event.message.text[-1]
+        elif event.message.text[5] == '小':
+            combo_product = event.message.text[1:8]
+            combo_count = event.message.text[-1]
+        dic = {'userid':uid,
+            'username':name,
+            'creattime':datetime.now(),
+            'product':combo_product,
+            'count':combo_count,
+            'status':0}
+        mongodb.insert_one(dic,'vproduct')
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text[0:3] == '買烤肉':
+        if event.message.text[3] == '大':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        elif event.message.text[3] == '中':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        elif event.message.text[3] == '小':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        dic = {'userid':uid,
+            'username':name,
+            'creattime':datetime.now(),
+            'product':combo_product,
+            'count':combo_count,
+            'status':0}
+        mongodb.insert_one(dic,'vproduct')
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text[0:3] == '買拜拜':
+        if event.message.text[3] == '大':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        elif event.message.text[3] == '中':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        elif event.message.text[3] == '小':
+            combo_product = event.message.text[1:6]
+            combo_count = event.message.text[-1]
+        dic = {'userid':uid,
+            'username':name,
+            'creattime':datetime.now(),
+            'product':combo_product,
+            'count':combo_count,
+            'status':0}
+        mongodb.insert_one(dic,'vproduct')
+        message = TextSendMessage(text='小鮮盒已經收到囉~~還要其他的嗎?')
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        line_bot_api.reply_message(event.reply_token,message)
+
     elif event.message.text == '查詢訂單':
         product_list = mongodb.get_user_product(uid,'vproduct')
         if len(product_list) == 0:
@@ -180,12 +240,7 @@ def handle_message(event):
                             MessageTemplateAction(
                             label='小組合-99元(1-2人份)',
                             text='買鮮蔬果小組合X1'
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
+                            )])]))
         line_bot_api.reply_message(event.reply_token,message)
 
     elif event.message.text == '當季蔬果組': 
@@ -209,12 +264,79 @@ def handle_message(event):
                             MessageTemplateAction(
                             label='小組合-99元(1-2人份)',
                             text='買當季蔬果小組合X1'
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
+                            )])]))
+        line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text == '綠色蔬菜組': 
+        message = TemplateSendMessage(
+                alt_text='需要哪種綠色蔬菜組合呢?',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
+                        title='需要哪種綠色蔬菜組合呢?',
+                        text='由不同的綠色蔬菜所組成(至少2-3種以上)',
+                        actions=[
+                            MessageTemplateAction(
+                            label='大組合-299元(4-5人份)',
+                            text='買綠色蔬菜大組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='中組合-199元(2-3人份)',
+                            text='買綠色蔬菜中組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='小組合-99元(1-2人份)',
+                            text='買綠色蔬菜小組合X1'
+                            )])]))
+        line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text == '烤肉組合': 
+        message = TemplateSendMessage(
+                alt_text='需要哪種烤肉組合呢?',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
+                        title='需要哪種烤肉組合呢?',
+                        text='由不同的烤肉必備食材所組成(至少2-3種以上)',
+                        actions=[
+                            MessageTemplateAction(
+                            label='大組合-299元(4-5人份)',
+                            text='買烤肉大組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='中組合-199元(2-3人份)',
+                            text='買烤肉中組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='小組合-99元(1-2人份)',
+                            text='買烤肉小組合X1'
+                            )])]))
+        line_bot_api.reply_message(event.reply_token,message)
+
+    elif event.message.text == '拜拜組合': 
+        message = TemplateSendMessage(
+                alt_text='需要哪種拜拜組合呢?',
+                template=CarouselTemplate(
+                    columns=[
+                        CarouselColumn(
+                        thumbnail_image_url='https://i.imgur.com/qnACcLd.jpg',
+                        title='需要哪種拜拜組合呢?',
+                        text='由各個節日拜拜所需蔬果組成(至少2-3種以上)',
+                        actions=[
+                            MessageTemplateAction(
+                            label='大組合-299元(4-5人份)',
+                            text='買拜拜大組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='中組合-199元(2-3人份)',
+                            text='買拜拜中組合X1'
+                            ),
+                            MessageTemplateAction(
+                            label='小組合-99元(1-2人份)',
+                            text='買拜拜小組合X1'
+                            )])]))
         line_bot_api.reply_message(event.reply_token,message)
 
     elif event.message.text == '買':
@@ -238,9 +360,7 @@ def handle_message(event):
                             MessageTemplateAction(
                                 label='綠色蔬菜組',
                                 text='綠色蔬菜組'
-                            )
-                        ]
-                    ),
+                            )]),
                         CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/0xFDvDV.jpg',
                         title='節慶組合',
@@ -257,9 +377,7 @@ def handle_message(event):
                             MessageTemplateAction(
                                 label='任意組合',
                                 text='任意組合'
-                            )
-                        ]
-                    ),
+                            )]),
                     CarouselColumn(
                         thumbnail_image_url='https://i.imgur.com/cLRmBTe.jpg',
                         title='其他',
@@ -276,12 +394,8 @@ def handle_message(event):
                             MessageTemplateAction(
                                 label='其他',
                                 text='其他'
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
+                            )])
+                ]))
         line_bot_api.reply_message(event.reply_token,message)
     elif event.message.text[0] == '買':
         product = event.message.text[1:]
@@ -294,8 +408,6 @@ def handle_message(event):
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
         
-        
-
     else:
         dic = {'userid':uid,
            'username':name,
