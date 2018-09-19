@@ -419,8 +419,8 @@ def handle_message(event):
         remove_product = event.message.text[2:]
         product_list = mongodb.get_user_product(uid,'vproduct')
         print(remove_product)
-        print(product_list)
-        if remove_product in set(product_list):
+        print([i for i in dict(product_list).keys()])
+        if remove_product in [i for i in dict(product_list).keys()]:
             mongodb.remove_user_product(uid,'vproduct',remove_product)
             text_ = '已' + str(event.message.text)
             message = TextSendMessage(text=text_)
