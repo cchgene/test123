@@ -415,45 +415,19 @@ def handle_message(event):
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
     
-    elif event.message.text[0:2] == '更改':
-        if event.message.text[2:8] == '鮮蔬果大組合|鮮蔬果中組合|鮮蔬果小組合':
-            product_change = event.message.text[2:8]
-            count_change = event.message.text[-1]
-            mongodb.remove_user_product(uid,'vproduct',product_change)
-            dic = {'userid':uid,
-            'username':name,
-            'creattime':datetime.now(),
-            'product':product_change,
-            'count':count_change,
-            'status':0}
-            mongodb.insert_one(dic,'vproduct')
-        elif event.message.text[2:9] == '當季蔬果大組合|當季蔬果中組合|當季蔬果小組合|綠色蔬菜大組合|綠色蔬菜中組合|綠色蔬菜小組合':
-            product_change = event.message.text[2:9]
-            count_change = event.message.text[-1]
-            mongodb.remove_user_product(uid,'vproduct',product_change)
-            dic = {'userid':uid,
-            'username':name,
-            'creattime':datetime.now(),
-            'product':product_change,
-            'count':count_change,
-            'status':0}
-            mongodb.insert_one(dic,'vproduct')
-        elif event.message.text[2:7] == '烤肉大組合|烤肉中組合|烤肉小組合|拜拜大組合|拜拜中組合|拜拜小組合':
-            product_change = event.message.text[2:7]
-            count_change = event.message.text[-1]
-            mongodb.remove_user_product(uid,'vproduct',product_change)
-            dic = {'userid':uid,
-            'username':name,
-            'creattime':datetime.now(),
-            'product':product_change,
-            'count':count_change,
-            'status':0}
-            mongodb.insert_one(dic,'vproduct')
-        text_ = '已' + str(event.message.text)
-        message = TextSendMessage(text=text_)
-        line_bot_api.reply_message(event.reply_token,message)
-        name_active = str(name)+':'+str(event.message.text)
-        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+    elif event.message.text[0:2] == '刪除':
+        remove_product = event.message.text[2:]
+        product_list = mongodb.get_user_product(uid,'vproduct')
+        if remove_product in dict(product_list).keys:
+            mongodb.remove_user_product(uid,'vproduct',remove_product)
+            text_ = '已' + str(event.message.text)
+            message = TextSendMessage(text=text_)
+            line_bot_api.reply_message(event.reply_token,message)
+            name_active = str(name)+':'+str(event.message.text)
+            line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+        else:
+            message = TextSendMessage(text='不好意思您沒有買這個商品喔')
+            line_bot_api.reply_message(event.reply_token,message)
     
     else:
         dic = {'userid':uid,
