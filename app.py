@@ -185,7 +185,14 @@ def handle_message(event):
             message = TextSendMessage(text=message)
 
         line_bot_api.reply_message(event.reply_token,message)
-        
+
+    elif event.message.text == '刪除購物籃內所有組合商品':
+        mongodb.remove_user_product(uid,'vproduct')
+        message = TextSendMessage(text='已刪除購物車內所有組合商品')
+        line_bot_api.reply_message(event.reply_token,message)
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+
     elif event.message.text[0:2] == '地址':
         address = event.message.text[2:]
         dic = {'username':name,
@@ -392,8 +399,8 @@ def handle_message(event):
                                 text='菜單與分類'
                             ),
                             MessageTemplateAction(
-                                label='其他',
-                                text='其他'
+                                label='刪除購物籃內所有組合商品',
+                                text='刪除購物籃內所有組合商品'
                             )])
                 ]))
         line_bot_api.reply_message(event.reply_token,message)
@@ -407,7 +414,21 @@ def handle_message(event):
         name_active = str(name)+':'+str(event.message.text)
         line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
         line_bot_api.reply_message(event.reply_token,message)
-        
+    
+    elif event.message.text[0:2] == '更改':
+        if event.message.text[2:8] == '鮮蔬果大組合|鮮蔬果中組合|鮮蔬果小組合':
+            product_ = event.message.text[2:8]
+        elif event.message.text[2:9] == '當季蔬果大組合|當季蔬果中組合|當季蔬果小組合|綠色蔬菜大組合|綠色蔬菜中組合|綠色蔬菜小組合':
+            product_ = event.message.text[2:9]
+        elif event.message.text[2:7] == '烤肉大組合|烤肉中組合|烤肉小組合|拜拜大組合|拜拜中組合|拜拜小組合':
+            product_ = event.message.text[2:7]
+        count_change = event.message.text[-1]
+        update_user_product_count(uid,'vproduct',product_,count_change)
+        message = '已'+str(event.message.text[0:2]) + str(product_) + '為' + str(count_change) + '份'
+        line_bot_api.reply_message(event.reply_token,message)
+        name_active = str(name)+':'+str(event.message.text)
+        line_bot_api.push_message(os.environ['gene_uid'], TextSendMessage(text=name_active))
+    
     else:
         dic = {'userid':uid,
            'username':name,
